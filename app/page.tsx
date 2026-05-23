@@ -9,9 +9,6 @@ import {
   ChevronRight,
   CircleAlert,
   Cpu,
-  DollarSign,
-  Gauge,
-  Globe,
   MapPinned,
   Menu,
   MoonStar,
@@ -19,6 +16,7 @@ import {
   Sparkles,
   X,
 } from "lucide-react";
+import AskSolarLogic from "../components/AskSolarLogic";
 
 type StateDatum = {
   code: string;
@@ -123,7 +121,7 @@ const contractCards = [
     copy: "The financed price quietly explodes while the cash quote never appears on page one.",
   },
   {
-    title: "The 'Estimated' Production Clause",
+    title: "The \u2018Estimated\u2019 Production Clause",
     stat: "Zero output guarantee",
     copy: "Installers promise savings with language that protects them if the system underperforms.",
   },
@@ -137,7 +135,7 @@ const contractCards = [
 const packs = [
   {
     badge: "BEST SELLER",
-    title: "Solar Decision-Maker's Toolkit",
+    title: "Solar Decision-Maker\u2019s Toolkit",
     price: "$79",
     strike: "$1,000+ Value",
     features: ["ROI calculator", "Scam report", "Installer comparison sheet", "Battery decision matrix"],
@@ -161,7 +159,7 @@ const packs = [
 const researchItems = [
   {
     tag: "SCAM ALERT",
-    title: "Why Dealer Fees Break the Economics of '0% APR' Solar",
+    title: "Why Dealer Fees Break the Economics of \u20180% APR\u2019 Solar",
     summary: "A briefing on financed pricing, prepaid finance charges, and how to compare to true cash cost.",
   },
   {
@@ -185,7 +183,7 @@ const testimonials = [
   },
   {
     source: "Email",
-    quote: "Your battery analysis kept us from oversizing the system. Saved us almost $4k.",
+    quote: "Your battery analysis kept us from over-sizing the system. Saved us almost $4k.",
   },
   {
     source: "Tweet",
@@ -257,7 +255,13 @@ function getDirectionColor(direction?: MarketPoint["direction"]) {
 export default function SolarLogicHome() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [blueprintMode, setBlueprintMode] = useState(false);
-  const [stateCode, setStateCode] = useState("CA");
+  const [stateCode, setStateCode] = useState(() => {
+    if (typeof navigator !== "undefined") {
+      const language = navigator.language || "en-US";
+      if (language.includes("en-US")) return "TX";
+    }
+    return "CA";
+  });
   const [bill, setBill] = useState(240);
   const [email, setEmail] = useState("");
   const [estimatorStep, setEstimatorStep] = useState(1);
@@ -298,13 +302,6 @@ export default function SolarLogicHome() {
     document.body.classList.toggle("blueprint", blueprintMode);
     return () => document.body.classList.remove("blueprint");
   }, [blueprintMode]);
-
-  useEffect(() => {
-    const language = navigator.language || "en-US";
-    if (language.includes("en-US")) {
-      setStateCode("TX");
-    }
-  }, []);
 
   return (
     <div className="app-shell text-main selection:bg-[#FFD700] selection:text-black">
@@ -380,7 +377,7 @@ export default function SolarLogicHome() {
       </header>
 
       <main id="top">
-        {/* HERO SECTION */}
+        {/* ─── HERO SECTION ─── */}
         <section className="relative mx-auto flex max-w-7xl flex-col gap-12 px-4 pb-14 pt-10 sm:px-6 lg:flex-row lg:px-8 lg:pt-16">
           <div className="relative z-10 max-w-3xl flex-1">
             <motion.div
@@ -399,7 +396,7 @@ export default function SolarLogicHome() {
               transition={{ duration: 0.7, delay: 0.1 }}
               className="display-font text-5xl font-bold leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl"
             >
-              Energy Independence for <span className="gold-text">{selectedState.name}</span> Homeowners is a Mathematical Certainty.
+              Stop Guessing on Solar and EV Decisions.
             </motion.h1>
 
             <motion.p
@@ -408,7 +405,7 @@ export default function SolarLogicHome() {
               transition={{ duration: 0.7, delay: 0.2 }}
               className="mt-6 max-w-2xl text-lg leading-8 text-muted sm:text-xl"
             >
-              We analyze millions of data points to protect homeowners from the $30,000 mistake. Stop guessing. Start calculating.
+              Use data-driven tools to estimate payback, check quotes, and avoid expensive mistakes before you sign anything. Built for <span className="gold-text font-semibold">{selectedState.name}</span> homeowners.
             </motion.p>
 
             <motion.div
@@ -421,13 +418,13 @@ export default function SolarLogicHome() {
                 href="#estimator"
                 className="pulse-gold rounded-full gold-bg px-6 py-4 text-center text-sm font-extrabold uppercase tracking-[0.2em] transition hover:scale-[1.02]"
               >
-                Run The Free Calculator
+                Run the Free Calculator
               </a>
               <a
                 href="#map"
                 className="panel rounded-full px-6 py-4 text-center text-sm font-semibold uppercase tracking-[0.2em] text-main transition hover:-translate-y-0.5"
               >
-                View The Data
+                Check My Quote
               </a>
             </motion.div>
 
@@ -474,17 +471,17 @@ export default function SolarLogicHome() {
                   transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
                   className="absolute h-72 w-72 rounded-full border border-white/5 border-dashed"
                 />
-                 <motion.div
+                <motion.div
                   animate={{ rotate: -360 }}
                   transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
                   className="absolute h-60 w-60 rounded-full border border-white/10"
                 />
-                
+
                 <div className="relative z-10">
-                    <div className="relative h-40 w-56 rounded-2xl border border-white/10 bg-black/50 backdrop-blur-md flex items-center justify-center flex-col">
-                        <div className="text-4xl font-bold gold-text">82%</div>
-                        <div className="text-xs uppercase tracking-widest text-muted mt-2">Grid Independence</div>
-                    </div>
+                  <div className="relative h-40 w-56 rounded-2xl border border-white/10 bg-black/50 backdrop-blur-md flex items-center justify-center flex-col">
+                    <div className="text-4xl font-bold gold-text">82%</div>
+                    <div className="text-xs uppercase tracking-widest text-muted mt-2">Grid Independence</div>
+                  </div>
                 </div>
 
                 <div className="absolute bottom-4 left-4 right-4 grid gap-3 sm:grid-cols-2">
@@ -503,7 +500,7 @@ export default function SolarLogicHome() {
           </motion.div>
         </section>
 
-        {/* TICKER */}
+        {/* ─── TICKER ─── */}
         <section className="border-y border-white/8 bg-white/[0.02] py-4">
           <div className="overflow-hidden whitespace-nowrap">
             <div className="marquee-track gap-8 pr-8">
@@ -518,7 +515,7 @@ export default function SolarLogicHome() {
           </div>
         </section>
 
-        {/* MAP SECTION */}
+        {/* ─── MAP SECTION ─── */}
         <section id="map" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <div className="mb-10 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-2xl">
@@ -595,20 +592,20 @@ export default function SolarLogicHome() {
               </div>
               <div className="mt-6 rounded-2xl border border-[#00E676]/20 bg-[#00E676]/8 p-4">
                 <p className="text-xs uppercase tracking-[0.2em] text-[#00E676]">Solar Viability</p>
-                <p className="mt-2 text-xl">{"⭐".repeat(selectedState.viability)}</p>
+                <p className="mt-2 text-xl">{"\u2B50".repeat(selectedState.viability)}</p>
               </div>
             </motion.div>
           </div>
         </section>
 
-        {/* SCAM CONTRACTS */}
+        {/* ─── SCAM CONTRACTS ─── */}
         <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
           <div className="panel overflow-hidden rounded-[2rem] p-6 sm:p-8">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
               <div className="max-w-2xl">
                 <p className="data-text text-xs uppercase tracking-[0.3em] text-muted">The Problem</p>
                 <h2 className="mt-3 display-font text-4xl font-bold sm:text-5xl">The Industry Hides the Truth.</h2>
-                <p className="mt-4 text-lg text-muted">These are real homeowner pain points disguised as "financing options" and "estimated savings." We read the fine print so you don’t have to.</p>
+                <p className="mt-4 text-lg text-muted">These are real homeowner pain points disguised as &ldquo;financing options&rdquo; and &ldquo;estimated savings.&rdquo; We read the fine print so you don&apos;t have to.</p>
               </div>
               <div className="rounded-full border border-[#FF3D00]/25 bg-[#FF3D00]/10 px-4 py-2 data-text text-xs uppercase tracking-[0.25em] text-[#FF8A65]">
                 Scam pattern recognition enabled
@@ -652,7 +649,7 @@ export default function SolarLogicHome() {
           </div>
         </section>
 
-        {/* CALCULATOR & CHARGER */}
+        {/* ─── CALCULATOR & CHARGER ─── */}
         <section id="estimator" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
             <div className="panel rounded-[2rem] p-6 sm:p-8">
@@ -825,7 +822,7 @@ export default function SolarLogicHome() {
           </div>
         </section>
 
-        {/* HOUSE DIAGRAM */}
+        {/* ─── HOUSE DIAGRAM ─── */}
         <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
           <div className="grid gap-6 lg:grid-cols-[1fr_1fr]">
             <div className="panel rounded-[2rem] p-6 sm:p-8">
@@ -908,7 +905,7 @@ export default function SolarLogicHome() {
                     <ul className="mt-5 space-y-3 text-sm text-muted">
                       {pack.features.map((feature) => (
                         <li key={feature} className="flex items-center gap-3">
-                          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#00E676]/10 text-[#00E676]">✓</span>
+                          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#00E676]/10 text-[#00E676]">{"\u2713"}</span>
                           {feature}
                         </li>
                       ))}
@@ -923,12 +920,73 @@ export default function SolarLogicHome() {
           </div>
         </section>
 
-        {/* SOCIAL PROOF */}
+        {/* ─── RESEARCH / INTELLIGENCE ─── */}
+        <section id="research" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+          <div className="mb-10 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+            <div className="max-w-2xl">
+              <p className="data-text text-xs uppercase tracking-[0.3em] text-muted">Intelligence</p>
+              <h2 className="mt-3 display-font text-4xl font-bold sm:text-5xl">Research that protects your wallet.</h2>
+              <p className="mt-4 text-lg text-muted">
+                Deep dives into the tricks, the math, and the gear — written for homeowners, not engineers.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid gap-5 lg:grid-cols-3">
+            {researchItems.map((item, index) => (
+              <motion.div
+                key={item.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.45, delay: index * 0.08 }}
+                whileHover={{ y: -6 }}
+                className="card-surface rounded-[1.75rem] p-6"
+              >
+                <div className="mb-4 inline-flex rounded-full border border-[#FFD700]/20 bg-[#FFD700]/10 px-3 py-1 data-text text-[11px] uppercase tracking-[0.24em] text-main">
+                  {item.tag}
+                </div>
+                <h3 className="display-font text-xl font-bold leading-tight">{item.title}</h3>
+                <p className="mt-4 text-sm leading-7 text-muted">{item.summary}</p>
+                <a href="#" className="mt-5 inline-flex items-center gap-2 text-sm font-semibold gold-text">
+                  Read briefing <ArrowRight className="h-4 w-4" />
+                </a>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        {/* ─── GLOSSARY OF GREED ─── */}
+        <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+          <div className="panel rounded-[2rem] p-6 sm:p-8">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+              <div>
+                <p className="data-text text-xs uppercase tracking-[0.3em] text-muted">Glossary of Greed</p>
+                <h2 className="mt-3 display-font text-4xl font-bold sm:text-5xl">Know the language they use against you.</h2>
+                <p className="mt-4 text-lg text-muted">Every term decoded. Every trap explained. Every homeowner armed.</p>
+              </div>
+            </div>
+
+            <div className="mt-8 flex flex-wrap gap-3">
+              {glossary.map((term) => (
+                <a
+                  key={term}
+                  href="#"
+                  className="rounded-full border border-white/10 bg-white/[0.04] px-5 py-3 text-sm font-semibold text-muted transition hover:border-[#FFD700]/30 hover:bg-[#FFD700]/8 hover:text-main"
+                >
+                  {term}
+                </a>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ─── SOCIAL PROOF ─── */}
         <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
             <div className="panel rounded-[2rem] p-6 sm:p-8">
               <p className="data-text text-xs uppercase tracking-[0.28em] text-muted">Social Proof</p>
-              <h2 className="mt-3 display-font text-4xl font-bold">People don’t want hype. They want numbers.</h2>
+              <h2 className="mt-3 display-font text-4xl font-bold">People don&apos;t want hype. They want numbers.</h2>
               <div className="mt-6 rounded-[1.75rem] border border-[#00E676]/20 bg-[#00E676]/8 p-5">
                 <p className="text-xs uppercase tracking-[0.2em] text-[#00E676]">Trust Badge</p>
                 <p className="mt-3 display-font text-4xl font-bold">
@@ -961,32 +1019,55 @@ export default function SolarLogicHome() {
                   className="card-surface rounded-[1.75rem] p-5"
                 >
                   <p className="data-text text-xs uppercase tracking-[0.22em] text-muted">{testimonial.source}</p>
-                  <p className="mt-4 text-lg leading-8">“{testimonial.quote}”</p>
+                  <p className="mt-4 text-lg leading-8">&ldquo;{testimonial.quote}&rdquo;</p>
                 </motion.div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* FOOTER */}
+        {/* ─── FOOTER ─── */}
         <section id="about" className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-            <div className="panel rounded-[2rem] p-8 text-center">
-                 <p className="display-font text-2xl font-bold">SOLARLOGIC</p>
-                 <p className="mt-2 text-sm text-muted">Built for Sovereignty.</p>
-                 <div className="mt-8 flex flex-wrap justify-center gap-6 text-sm text-muted">
-                    <a href="#" className="hover:text-white">Methodology</a>
-                    <a href="#" className="hover:text-white">Privacy</a>
-                    <a href="#" className="hover:text-white">Terms</a>
-                 </div>
-                 <p className="mt-8 text-xs text-muted/50">© 2026 SolarLogic. Independent Research.</p>
+          <div className="panel rounded-[2rem] p-8 text-center">
+            <p className="display-font text-2xl font-bold">SOLARLOGIC</p>
+            <p className="mt-2 text-sm text-muted">Built for Sovereignty.</p>
+            <p className="mt-4 max-w-xl mx-auto text-sm text-muted leading-7">
+              We help homeowners make better solar and EV decisions using simple, defensible math. No installer incentives. No manufacturer mouthpieces. Just data.
+            </p>
+            <div className="mt-8 flex flex-wrap justify-center gap-6 text-sm text-muted">
+              <a href="#" className="hover:text-white transition">Methodology</a>
+              <a href="#" className="hover:text-white transition">Sources</a>
+              <a href="#" className="hover:text-white transition">Privacy</a>
+              <a href="#" className="hover:text-white transition">Terms</a>
+              <a href="#" className="hover:text-white transition">Affiliate Disclosure</a>
             </div>
+            <p className="mt-8 text-xs text-muted/50">&copy; 2026 SolarLogic. Independent Research.</p>
+          </div>
         </section>
       </main>
 
-      {/* EMERGENCY MODAL */}
+      {/* ─── STICKY MOBILE CTA BAR ─── */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-white/8 bg-black/90 backdrop-blur-xl px-4 py-3 md:hidden">
+        <div className="flex gap-2">
+          <a
+            href="#estimator"
+            className="flex-1 rounded-full gold-bg py-3 text-center text-xs font-extrabold uppercase tracking-[0.15em]"
+          >
+            Estimate Solar
+          </a>
+          <a
+            href="#map"
+            className="flex-1 rounded-full border border-white/10 py-3 text-center text-xs font-bold uppercase tracking-[0.15em] text-muted"
+          >
+            Check a Quote
+          </a>
+        </div>
+      </div>
+
+      {/* ─── EMERGENCY MODAL ─── */}
       <button
         onClick={() => setQuoteModalOpen(true)}
-        className="fixed bottom-5 right-5 z-50 rounded-full border border-[#FF3D00]/35 bg-[#FF3D00] px-5 py-4 text-sm font-extrabold uppercase tracking-[0.15em] text-white shadow-[0_18px_50px_rgba(255,61,0,0.35)] transition hover:scale-[1.03]"
+        className="fixed bottom-20 right-5 z-50 rounded-full border border-[#FF3D00]/35 bg-[#FF3D00] px-5 py-4 text-sm font-extrabold uppercase tracking-[0.15em] text-white shadow-[0_18px_50px_rgba(255,61,0,0.35)] transition hover:scale-[1.03] md:bottom-5"
       >
         I Have a Quote in Hand
       </button>
@@ -1026,6 +1107,9 @@ export default function SolarLogicHome() {
           </motion.div>
         </div>
       ) : null}
+
+      {/* ── ASK SOLARLOGIC CHATBOT ── */}
+      <AskSolarLogic pageContext="home" />
     </div>
   );
 }
