@@ -138,6 +138,7 @@ const packs = [
     title: "Solar Decision-Maker\u2019s Toolkit",
     price: "$79",
     strike: "$1,000+ Value",
+    link: "https://checkout.suby.fi/p/pro_vewxkc4yku8iakdvidab0bbb",
     features: ["ROI calculator", "Scam report", "Installer comparison sheet", "Battery decision matrix"],
   },
   {
@@ -145,13 +146,15 @@ const packs = [
     title: "Home EV Charging Blueprint",
     price: "$49",
     strike: "Engineer-grade guidance",
+    link: "https://checkout.suby.fi/p/pro_wv1lne6qub4nn4wtwvipi35h",
     features: ["Panel capacity guide", "TOU savings model", "Charger selector", "Permit checklist"],
   },
   {
     badge: "QUICK START",
     title: "Quote Sanity Check",
-    price: "$19",
+    price: "$49",
     strike: "Fastest way to verify a proposal",
+    link: "https://checkout.suby.fi/p/pro_vewxkc4yku8iakdvidab0bbb",
     features: ["Dealer fee formula", "Offset audit", "Cash vs finance analysis", "Red-flag checklist"],
   },
 ];
@@ -910,9 +913,9 @@ export default function SolarLogicHome() {
                         </li>
                       ))}
                     </ul>
-                    <button className="mt-6 w-full rounded-full gold-bg px-5 py-3 text-sm font-extrabold uppercase tracking-[0.18em]">
+                    <a href={pack.link} target="_blank" rel="noopener noreferrer" className="mt-6 w-full rounded-full gold-bg px-5 py-3 text-sm font-extrabold uppercase tracking-[0.18em] inline-block text-center">
                       Access Pack
-                    </button>
+                    </a>
                   </motion.div>
                 ))}
               </div>
