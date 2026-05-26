@@ -743,7 +743,24 @@ export default function SolarLogicHome() {
                       onChange={(event) => setEmail(event.target.value)}
                       className="w-full rounded-2xl border border-white/10 bg-transparent px-4 py-4 text-main outline-none placeholder:text-muted focus:border-[#FFD700]/50"
                     />
-                    <button className="w-full rounded-full gold-bg px-5 py-4 text-sm font-extrabold uppercase tracking-[0.18em]">
+                    <button
+                      onClick={() => {
+                        if (email) {
+                          fetch('https://api.convertkit.com/v3/forms/9487249/subscribe', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                              api_key: 'YOUR_V3_API_KEY_HERE',
+                              email: email,
+                              fields: {
+                                source: 'solarlogic_calculator'
+                              }
+                            })
+                          }).catch(() => {});
+                        }
+                      }}
+                      className="w-full rounded-full gold-bg px-5 py-4 text-sm font-extrabold uppercase tracking-[0.18em]"
+                    >
                       Calculate My Savings
                     </button>
                   </div>
@@ -870,9 +887,20 @@ export default function SolarLogicHome() {
                   <p className="data-text text-xs uppercase tracking-[0.2em] text-muted">Selected Zone</p>
                   <h3 className="mt-3 display-font text-2xl font-bold">{activeHouseZone.title}</h3>
                   <p className="mt-4 text-sm leading-7 text-muted">{activeHouseZone.copy}</p>
-                  <div className="mt-6 flex items-center gap-2 text-sm font-semibold gold-text">
+                  <a
+                    href={
+                      activeZone === "roof"
+                        ? "https://checkout.suby.fi/p/pro_vewxkc4yku8iakdvidab0bbb"
+                        : activeZone === "garage"
+                        ? "https://checkout.suby.fi/p/pro_wv1lne6qub4nn4wtwvipi35h"
+                        : "https://checkout.suby.fi/p/pro_wv1lne6qub4nn4wtwvipi35h"
+                    }
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-6 inline-flex items-center gap-2 text-sm font-semibold gold-text hover:gap-3 transition-all"
+                  >
                     Open guide <ChevronRight className="h-4 w-4" />
-                  </div>
+                  </a>
                 </div>
               </div>
             </div>
@@ -936,26 +964,38 @@ export default function SolarLogicHome() {
           </div>
 
           <div className="grid gap-5 lg:grid-cols-3">
-            {researchItems.map((item, index) => (
-              <motion.div
-                key={item.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.45, delay: index * 0.08 }}
-                whileHover={{ y: -6 }}
-                className="card-surface rounded-[1.75rem] p-6"
-              >
-                <div className="mb-4 inline-flex rounded-full border border-[#FFD700]/20 bg-[#FFD700]/10 px-3 py-1 data-text text-[11px] uppercase tracking-[0.24em] text-main">
-                  {item.tag}
-                </div>
-                <h3 className="display-font text-xl font-bold leading-tight">{item.title}</h3>
-                <p className="mt-4 text-sm leading-7 text-muted">{item.summary}</p>
-                <a href="#" className="mt-5 inline-flex items-center gap-2 text-sm font-semibold gold-text">
-                  Read briefing <ArrowRight className="h-4 w-4" />
-                </a>
-              </motion.div>
-            ))}
+            {researchItems.map((item, index) => {
+              const briefingUrls = [
+                "https://www.youtube.com/watch?v=QMkJ_wCU2W8",
+                "https://www.youtube.com/watch?v=term12DWIEI",
+                "https://www.youtube.com/watch?v=GhWNFBjHMYU"
+              ];
+              return (
+                <motion.div
+                  key={item.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  transition={{ duration: 0.45, delay: index * 0.08 }}
+                  whileHover={{ y: -6 }}
+                  className="card-surface rounded-[1.75rem] p-6"
+                >
+                  <div className="mb-4 inline-flex rounded-full border border-[#FFD700]/20 bg-[#FFD700]/10 px-3 py-1 data-text text-[11px] uppercase tracking-[0.24em] text-main">
+                    {item.tag}
+                  </div>
+                  <h3 className="display-font text-xl font-bold leading-tight">{item.title}</h3>
+                  <p className="mt-4 text-sm leading-7 text-muted">{item.summary}</p>
+                  <a
+                    href={briefingUrls[index]}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-5 inline-flex items-center gap-2 text-sm font-semibold gold-text"
+                  >
+                    Read briefing <ArrowRight className="h-4 w-4" />
+                  </a>
+                </motion.div>
+              );
+            })}
           </div>
         </section>
 
@@ -974,7 +1014,9 @@ export default function SolarLogicHome() {
               {glossary.map((term) => (
                 <a
                   key={term}
-                  href="#"
+                  href="https://checkout.suby.fi/p/pro_vewxkc4yku8iakdvidab0bbb"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="rounded-full border border-white/10 bg-white/[0.04] px-5 py-3 text-sm font-semibold text-muted transition hover:border-[#FFD700]/30 hover:bg-[#FFD700]/8 hover:text-main"
                 >
                   {term}
