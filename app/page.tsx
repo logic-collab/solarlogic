@@ -750,7 +750,7 @@ export default function SolarLogicHome() {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
-                              api_key: 'YOUR_V3_API_KEY_HERE',
+                              api_key: 'RaeLwd603hKer4RlZeHtTg',
                               email: email,
                               fields: {
                                 source: 'solarlogic_calculator'
