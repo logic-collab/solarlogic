@@ -271,6 +271,7 @@ export default function SolarLogicHome() {
   const [quizAnswers, setQuizAnswers] = useState({ distance: true, panel: "200A", tou: true });
   const [activeZone, setActiveZone] = useState<(typeof houseZones)[number]["key"]>("roof");
   const [quoteModalOpen, setQuoteModalOpen] = useState(false);
+  const [emailSubmitted, setEmailSubmitted] = useState(false);
 
   const selectedState = useMemo(
     () => states.find((state) => state.code === stateCode) ?? states[0],
@@ -731,7 +732,7 @@ export default function SolarLogicHome() {
                   <div className="space-y-4">
                     <div className="rounded-[1.75rem] border border-white/10 bg-white/[0.02] p-5">
                       <p className="text-sm text-muted">Projected annual savings in {selectedState.name}</p>
-                      <p className="mt-2 display-font text-5xl font-bold blur-[2px] select-none">
+                      <p className={`mt-2 display-font text-5xl font-bold select-none ${emailSubmitted ? "" : "blur-[2px]"}`}>
                         ${savingsEstimate.toLocaleString()}
                       </p>
                       <p className="mt-3 text-sm text-muted">Enter your email to unlock the full report, financing warnings, and recommended system range.</p>
@@ -746,7 +747,8 @@ export default function SolarLogicHome() {
                     <button
                       onClick={() => {
                         if (email) {
-                          fetch('https://api.convertkit.com/v3/forms/9487249/subscribe', {
+                          setEmailSubmitted(true);
+                          fetch('https://api.convertkit.com/v3/forms/5146b60f53/subscribe', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
