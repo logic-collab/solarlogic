@@ -1,7 +1,21 @@
 import Groq from "groq-sdk";
 import { NextRequest } from "next/server";
 
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+let groqClient: Groq | undefined;
+
+function getGroqClient(): Groq {
+  if (groqClient) {
+    return groqClient;
+  }
+
+  const apiKey = process.env.GROQ_API_KEY;
+  if (!apiKey) {
+    throw new Error("GROQ_API_KEY is not configured");
+  }
+
+  groqClient = new Groq({ apiKey });
+  return groqClient;
+}
 
 // ─── Rate limiting (in-memory, per IP) ───────────────────────
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
@@ -371,6 +385,8 @@ export async function POST(req: NextRequest) {
 
     const fullSystemPrompt = `${SYSTEM_PROMPT}${contextBlock}`;
 
+    const groq = getGroqClient();
+
     const chatCompletion = await groq.chat.completions.create({
       messages: [
         { role: "system", content: fullSystemPrompt },
@@ -409,6 +425,14 @@ export async function POST(req: NextRequest) {
     });
   } catch (error: unknown) {
     console.error("Chat API error:", error);
+
+    if (error instanceof Error && error.message === "GROQ_API_KEY is not configured") {
+      return new Response(
+        JSON.stringify({ error: "AI service is not configured. Please try again later." }),
+        { status: 503, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
     return new Response(
       JSON.stringify({ error: "Something went wrong. Please try again." }),
       { status: 500, headers: { "Content-Type": "application/json" } }
