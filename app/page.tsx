@@ -35,13 +35,6 @@ type MarketPoint = {
   direction?: "up" | "down" | "neutral";
 };
 
-type CounterProps = {
-  value: number;
-  prefix?: string;
-  suffix?: string;
-  decimals?: number;
-};
-
 const states: StateDatum[] = [
   {
     code: "CA",
@@ -105,13 +98,15 @@ const states: StateDatum[] = [
   },
 ];
 
+// Typical reference figures shown in the ticker — labeled "Reference figures" in the UI,
+// not live market data. Update these as the market moves.
 const marketTicker: MarketPoint[] = [
-  { label: "AVG SOLAR COST (CA)", value: "$2.85/W", direction: "down" },
-  { label: "TESLA POWERWALL PRICE", value: "$15,000", direction: "up" },
+  { label: "TYPICAL SOLAR COST (CA)", value: "~$2.50-3.00/W", direction: "neutral" },
+  { label: "POWERWALL 3 INSTALLED", value: "~$14-16K", direction: "neutral" },
   { label: "NEM 3.0 STATUS", value: "ACTIVE", direction: "neutral" },
-  { label: "CURRENT FED TAX CREDIT", value: "30%", direction: "neutral" },
-  { label: "BATTERY PAYBACK", value: "9.2 YRS", direction: "down" },
-  { label: "SCAM ALERT LEVEL", value: "HIGH", direction: "up" },
+  { label: "FEDERAL TAX CREDIT", value: "30%", direction: "neutral" },
+  { label: "TYPICAL BATTERY PAYBACK", value: "~8-11 YRS", direction: "neutral" },
+  { label: "DEALER-FEE RISK", value: "HIGH", direction: "up" },
 ];
 
 const contractCards = [
@@ -179,25 +174,6 @@ const researchItems = [
 
 const glossary = ["Dealer Fee", "PPA", "True-Up", "NEM 3.0", "Offset", "Main Panel Upgrade"];
 
-const testimonials = [
-  {
-    source: "YouTube Comment",
-    quote: "I caught a $5,600 dealer fee before signing. This paid for itself in 10 minutes.",
-  },
-  {
-    source: "Email",
-    quote: "Your battery analysis kept us from over-sizing the system. Saved us almost $4k.",
-  },
-  {
-    source: "Tweet",
-    quote: "This felt like having a Palantir dashboard for my utility bill. Brutal clarity.",
-  },
-  {
-    source: "DM",
-    quote: "Installer said 115% offset was normal. Your checklist told me exactly why it was nonsense.",
-  },
-];
-
 const houseZones = [
   {
     key: "roof",
@@ -218,36 +194,6 @@ const houseZones = [
     copy: "How to know when 100A service becomes the bottleneck for solar, storage, and charging.",
   },
 ] as const;
-
-function Counter({ value, prefix = "", suffix = "", decimals = 0 }: CounterProps) {
-  const [display, setDisplay] = useState(0);
-
-  useEffect(() => {
-    let raf = 0;
-    const duration = 1600;
-    const start = performance.now();
-
-    const tick = (now: number) => {
-      const progress = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setDisplay(value * eased);
-      if (progress < 1) {
-        raf = requestAnimationFrame(tick);
-      }
-    };
-
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [value]);
-
-  return (
-    <span>
-      {prefix}
-      {display.toFixed(decimals)}
-      {suffix}
-    </span>
-  );
-}
 
 function getDirectionColor(direction?: MarketPoint["direction"]) {
   if (direction === "up") return "text-[#FF3D00]";
@@ -391,7 +337,7 @@ export default function SolarLogicHome() {
               className="soft-badge mb-6 inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.28em] text-main border border-white/10 bg-white/5"
             >
               <Sparkles className="h-3.5 w-3.5 gold-text" />
-              Independent research collective
+              Independent solar &amp; EV research
             </motion.div>
 
             <motion.h1
@@ -434,15 +380,13 @@ export default function SolarLogicHome() {
 
             <div className="mt-10 grid gap-4 sm:grid-cols-3">
               {[
-                { label: "Verified Savings Generated", value: 2.4, prefix: "$", suffix: "M+", decimals: 1 },
-                { label: "Quotes Audited", value: 1827, suffix: "+" },
-                { label: "Avg Avoided Mistake", value: 5300, prefix: "$", suffix: "+" },
-              ].map((metric) => (
-                <div key={metric.label} className="card-surface rounded-3xl p-5">
-                  <p className="data-text text-2xl font-bold gold-text">
-                    <Counter value={metric.value} prefix={metric.prefix} suffix={metric.suffix} decimals={metric.decimals} />
-                  </p>
-                  <p className="mt-2 text-sm text-muted">{metric.label}</p>
+                { title: "Free calculators", copy: "Solar payback estimate and an EV charger matcher — no cost." },
+                { title: "Independent", copy: "No installer incentives. No manufacturer mouthpieces." },
+                { title: "Built for your state", copy: "Rate and net-metering context for CA, TX, AZ, FL, NY, and NJ." },
+              ].map((item) => (
+                <div key={item.title} className="card-surface rounded-3xl p-5">
+                  <p className="display-font text-lg font-bold gold-text">{item.title}</p>
+                  <p className="mt-2 text-sm text-muted">{item.copy}</p>
                 </div>
               ))}
             </div>
@@ -460,12 +404,12 @@ export default function SolarLogicHome() {
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#FFD700] to-transparent opacity-20" />
               <div className="mb-5 flex items-center justify-between">
                 <div>
-                  <p className="data-text text-xs uppercase tracking-[0.3em] text-muted">Live System Model</p>
+                  <p className="data-text text-xs uppercase tracking-[0.3em] text-muted">Example System Model</p>
                   <p className="mt-2 display-font text-2xl font-bold">Energy Stack</p>
                 </div>
                 <div className="rounded-full border border-white/10 px-3 py-1 data-text text-xs text-muted flex items-center gap-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                  ONLINE
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#FFD700] animate-pulse" />
+                  EXAMPLE
                 </div>
               </div>
 
@@ -505,16 +449,21 @@ export default function SolarLogicHome() {
         </section>
 
         {/* ─── TICKER ─── */}
-        <section className="border-y border-white/8 bg-white/[0.02] py-4">
-          <div className="overflow-hidden whitespace-nowrap">
-            <div className="marquee-track gap-8 pr-8">
-              {[...marketTicker, ...marketTicker, ...marketTicker].map((item, index) => (
-                <div key={`${item.label}-${index}`} className="data-text inline-flex items-center gap-3 text-sm uppercase tracking-[0.22em] text-muted">
-                  <span>{item.label}</span>
-                  <span className={`font-bold ${getDirectionColor(item.direction)}`}>{item.value}</span>
-                  <span className="text-white/20">|</span>
-                </div>
-              ))}
+        <section className="border-y border-white/8 bg-white/[0.02] py-3">
+          <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 sm:px-6 lg:px-8">
+            <span className="hidden shrink-0 rounded-full border border-white/10 bg-black/40 px-3 py-1 data-text text-[10px] uppercase tracking-[0.25em] text-muted sm:inline-block">
+              Reference figures
+            </span>
+            <div className="overflow-hidden whitespace-nowrap">
+              <div className="marquee-track gap-8 pr-8">
+                {[...marketTicker, ...marketTicker, ...marketTicker].map((item, index) => (
+                  <div key={`${item.label}-${index}`} className="data-text inline-flex items-center gap-3 text-sm uppercase tracking-[0.22em] text-muted">
+                    <span>{item.label}</span>
+                    <span className={`font-bold ${getDirectionColor(item.direction)}`}>{item.value}</span>
+                    <span className="text-white/20">|</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </section>
@@ -526,7 +475,7 @@ export default function SolarLogicHome() {
               <p className="data-text text-xs uppercase tracking-[0.3em] text-muted">Interactive ROI Map</p>
               <h2 className="mt-3 display-font text-4xl font-bold sm:text-5xl">Hover the grid. Decode your market.</h2>
               <p className="mt-4 text-lg text-muted">
-                We hard-code the truth first, then connect APIs later. Start with a state. Read the economics. See the verdict.
+                Pick a state to see typical economics — electricity rate, net-metering rules, and a ballpark payback. These are general reference figures to orient you, not a live quote for your specific home.
               </p>
             </div>
             <div className="panel rounded-2xl px-4 py-3 data-text text-sm uppercase tracking-[0.2em] text-muted">
@@ -731,11 +680,11 @@ export default function SolarLogicHome() {
                 {estimatorStep === 3 ? (
                   <div className="space-y-4">
                     <div className="rounded-[1.75rem] border border-white/10 bg-white/[0.02] p-5">
-                      <p className="text-sm text-muted">Projected annual savings in {selectedState.name}</p>
+                      <p className="text-sm text-muted">Rough ballpark savings in {selectedState.name}</p>
                       <p className={`mt-2 display-font text-5xl font-bold select-none ${emailSubmitted ? "" : "blur-[2px]"}`}>
                         ${savingsEstimate.toLocaleString()}
                       </p>
-                      <p className="mt-3 text-sm text-muted">Enter your email to unlock the full report, financing warnings, and recommended system range.</p>
+                      <p className="mt-3 text-sm text-muted">Estimate only — a first-pass illustration, not a quote or guarantee. Enter your email and we&apos;ll send a more detailed breakdown as the full tools roll out.</p>
                     </div>
                     <input
                       type="email"
@@ -765,6 +714,14 @@ export default function SolarLogicHome() {
                     >
                       Calculate My Savings
                     </button>
+                    <p className="text-center text-[11px] leading-5 text-muted">
+                      By entering your email, you agree to receive occasional emails from SolarLogic.
+                      We never sell your data, and you can unsubscribe anytime. See our{" "}
+                      <a href="/privacy" className="gold-text underline underline-offset-2 hover:text-white">
+                        Privacy Policy
+                      </a>
+                      .
+                    </p>
                   </div>
                 ) : null}
               </div>
@@ -1028,46 +985,24 @@ export default function SolarLogicHome() {
           </div>
         </section>
 
-        {/* ─── SOCIAL PROOF ─── */}
+        {/* ─── APPROACH ─── */}
         <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-          <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-            <div className="panel rounded-[2rem] p-6 sm:p-8">
-              <p className="data-text text-xs uppercase tracking-[0.28em] text-muted">Social Proof</p>
-              <h2 className="mt-3 display-font text-4xl font-bold">People don&apos;t want hype. They want numbers.</h2>
-              <div className="mt-6 rounded-[1.75rem] border border-[#00E676]/20 bg-[#00E676]/8 p-5">
-                <p className="text-xs uppercase tracking-[0.2em] text-[#00E676]">Trust Badge</p>
-                <p className="mt-3 display-font text-4xl font-bold">
-                  <Counter value={2.4} prefix="$" suffix=" Million+" decimals={1} />
-                </p>
-                <p className="mt-2 text-sm text-muted">Verified savings generated across quote audits, DIY analysis, and toolkit deployments.</p>
-              </div>
-              <div className="mt-6 space-y-3">
-                {[
-                  "Independent model assumptions",
-                  "No installer incentives",
-                  "Research-first recommendations",
-                ].map((item) => (
-                  <div key={item} className="card-surface flex items-center gap-3 rounded-2xl p-4 text-sm text-muted">
-                    <Shield className="h-4 w-4 gold-text" />
-                    {item}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="grid gap-5 sm:grid-cols-2">
-              {testimonials.map((testimonial, index) => (
-                <motion.div
-                  key={testimonial.quote}
-                  initial={{ opacity: 0, y: 18 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.4 }}
-                  transition={{ duration: 0.45, delay: index * 0.08 }}
-                  className="card-surface rounded-[1.75rem] p-5"
-                >
-                  <p className="data-text text-xs uppercase tracking-[0.22em] text-muted">{testimonial.source}</p>
-                  <p className="mt-4 text-lg leading-8">&ldquo;{testimonial.quote}&rdquo;</p>
-                </motion.div>
+          <div className="panel rounded-[2rem] p-6 sm:p-10">
+            <p className="data-text text-xs uppercase tracking-[0.28em] text-muted">The Approach</p>
+            <h2 className="mt-3 display-font text-4xl font-bold sm:text-5xl">No hype. No installer incentives. Just the math.</h2>
+            <p className="mt-4 max-w-2xl text-lg text-muted">
+              SolarLogic exists to help homeowners pressure-test solar and EV decisions with simple, defensible math — not sales pressure.
+            </p>
+            <div className="mt-8 grid gap-4 sm:grid-cols-3">
+              {[
+                "Independent model assumptions",
+                "No installer incentives",
+                "Research-first recommendations",
+              ].map((item) => (
+                <div key={item} className="card-surface flex items-center gap-3 rounded-2xl p-4 text-sm text-muted">
+                  <Shield className="h-4 w-4 gold-text" />
+                  {item}
+                </div>
               ))}
             </div>
           </div>
@@ -1084,9 +1019,9 @@ export default function SolarLogicHome() {
             <div className="mt-8 flex flex-wrap justify-center gap-6 text-sm text-muted">
               <a href="#" className="hover:text-white transition">Methodology</a>
               <a href="#" className="hover:text-white transition">Sources</a>
-              <a href="#" className="hover:text-white transition">Privacy</a>
-              <a href="#" className="hover:text-white transition">Terms</a>
-              <a href="#" className="hover:text-white transition">Affiliate Disclosure</a>
+              <a href="/privacy" className="hover:text-white transition">Privacy</a>
+              <a href="/terms" className="hover:text-white transition">Terms</a>
+              <a href="/affiliate-disclosure" className="hover:text-white transition">Affiliate Disclosure</a>
             </div>
             <p className="mt-8 text-xs text-muted/50">&copy; 2026 SolarLogic. Independent Research.</p>
           </div>

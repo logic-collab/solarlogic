@@ -1,0 +1,7 @@
+# Cloudflare Pages configuration.
+# Static assets are built to ./out (Next.js `output: "export"`), and the
+# /api/chat Pages Function lives in ./functions. Set GROQ_API_KEY as an
+# encrypted variable in the Pages project settings (not here — it's a secret).
+name = "solarlogic"
+pages_build_output_dir = "out"
+compatibility_date = "2025-01-01"
